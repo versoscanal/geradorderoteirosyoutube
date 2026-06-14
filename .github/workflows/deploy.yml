@@ -32,9 +32,9 @@ jobs:
 
       - name: Build
         env:
-          VITE_SUPABASE_URL: https://wkvsohitzooukthyoxnk.supabase.co
-          VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrdnNvaGl0em9vdWt0aHlveG5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2ODcwMzEsImV4cCI6MjA4NzI2MzAzMX0.ZuWLJ2fZsk6PzHZm-jqC_UWMkpQ65jCS8Ynb9PgYhiw
-          VITE_SUPABASE_PROJECT_ID: wkvsohitzooukthyoxnk
+          VITE_SUPABASE_URL: https://cerwpcwjouuxfphyjwmd.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNlcndwY3dqb3V1eGZwaHlqd21kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MTM3ODUsImV4cCI6MjA5Njk4OTc4NX0._N6eoofCVSxZKX6kxQf83O2PB3qtqFuJJc7PAVFdFA4
+          VITE_SUPABASE_PROJECT_ID: cerwpcwjouuxfphyjwmd
         run: npx vite build
 
       - name: Upload artifact
