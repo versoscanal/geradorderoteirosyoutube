@@ -5,29 +5,35 @@ export class ScriptGeneratorAPI {
     const prompt = this.buildPrompt(scriptData);
 
     switch (provider.id) {
-      case 'gemini':
-        return this.callGemini(apiKey, prompt);
-      case 'openai':
-        return this.callOpenAI(apiKey, prompt);
-      case 'claude':
-        return this.callClaude(apiKey, prompt);
-      case 'grok':
-        return this.callGrok(apiKey, prompt);
-      case 'mistral':
-        return this.callMistral(apiKey, prompt);
-      case 'deepseek':
-        return this.callDeepSeek(apiKey, prompt);
-      case 'perplexity':
-        return this.callPerplexity(apiKey, prompt);
-      case 'copilot':
-        return this.callCopilot(apiKey, prompt);
-      case 'microsoft-copilot':
-        return this.callMicrosoftCopilot(apiKey, prompt);
-      case 'meta':
-        return this.callMeta(apiKey, prompt);
+      case 'ppq':
+        return this.callPPQ(apiKey, prompt, model);
       default:
         throw new Error(`Provider ${provider.id} não suportado`);
     }
+  }
+
+  private static async callPPQ(apiKey: string, prompt: string, model?: string): Promise<string> {
+    const response = await fetch("https://api.ppq.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: model || "gpt-4o",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 4000,
+        temperature: 0.7,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`Erro PPQ.ai (${response.status}): ${errorText || response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content ?? "";
   }
 
   private static buildPrompt(scriptData: ScriptData): string {
