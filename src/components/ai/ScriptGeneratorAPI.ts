@@ -7,22 +7,6 @@ export class ScriptGeneratorAPI {
     switch (provider.id) {
       case 'ppq':
         return this.callPPQ(apiKey, prompt, model);
-      case 'gemini':
-        return this.callGemini(apiKey, prompt);
-      case 'openai':
-        return this.callOpenAI(apiKey, prompt);
-      case 'claude':
-        return this.callClaude(apiKey, prompt);
-      case 'grok':
-        return this.callGrok(apiKey, prompt);
-      case 'mistral':
-        return this.callMistral(apiKey, prompt);
-      case 'deepseek':
-        return this.callDeepSeek(apiKey, prompt);
-      case 'perplexity':
-        return this.callPerplexity(apiKey, prompt);
-      case 'meta':
-        return this.callMeta(apiKey, prompt);
       default:
         throw new Error(`Provider ${provider.id} não suportado`);
     }
