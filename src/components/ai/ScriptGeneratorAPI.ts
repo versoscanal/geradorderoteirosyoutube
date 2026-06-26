@@ -7,9 +7,80 @@ export class ScriptGeneratorAPI {
     switch (provider.id) {
       case 'ppq':
         return this.callPPQ(apiKey, prompt, model);
+      case 'gemini':
+        return this.callGemini(apiKey, prompt, model);
+      case 'openai':
+        return this.callOpenAI(apiKey, prompt, model);
+      case 'claude':
+        return this.callClaude(apiKey, prompt, model);
       default:
         throw new Error(`Provider ${provider.id} não suportado`);
     }
+  }
+
+  private static async callGemini(apiKey: string, prompt: string, model?: string): Promise<string> {
+    const m = model || 'gemini-1.5-flash';
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 4000 },
+        }),
+      }
+    );
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(`Erro Gemini (${response.status}): ${errorText || response.statusText}`);
+    }
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+  }
+
+  private static async callOpenAI(apiKey: string, prompt: string, model?: string): Promise<string> {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: model || 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 4000,
+        temperature: 0.7,
+      }),
+    });
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(`Erro OpenAI (${response.status}): ${errorText || response.statusText}`);
+    }
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content ?? '';
+  }
+
+  private static async callClaude(apiKey: string, prompt: string, model?: string): Promise<string> {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: model || 'claude-3-5-sonnet-20241022',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(`Erro Claude (${response.status}): ${errorText || response.statusText}`);
+    }
+    const data = await response.json();
+    return data.content?.[0]?.text ?? '';
   }
 
   private static async callPPQ(apiKey: string, prompt: string, model?: string): Promise<string> {
