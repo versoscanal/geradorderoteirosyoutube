@@ -13,9 +13,41 @@ export class ScriptGeneratorAPI {
         return this.callOpenAI(apiKey, prompt, model);
       case 'claude':
         return this.callClaude(apiKey, prompt, model);
+      case 'grok':
+        return this.callOpenAICompat(apiKey, prompt, 'https://api.x.ai/v1/chat/completions', model || 'grok-2-latest', 'Grok');
+      case 'mistral':
+        return this.callOpenAICompat(apiKey, prompt, 'https://api.mistral.ai/v1/chat/completions', model || 'mistral-large-latest', 'Mistral');
+      case 'deepseek':
+        return this.callOpenAICompat(apiKey, prompt, 'https://api.deepseek.com/v1/chat/completions', model || 'deepseek-chat', 'DeepSeek');
+      case 'perplexity':
+        return this.callOpenAICompat(apiKey, prompt, 'https://api.perplexity.ai/chat/completions', model || 'llama-3.1-sonar-small-128k-online', 'Perplexity');
+      case 'llama':
+        return this.callOpenAICompat(apiKey, prompt, 'https://api.groq.com/openai/v1/chat/completions', model || 'llama-3.3-70b-versatile', 'Groq');
       default:
         throw new Error(`Provider ${provider.id} não suportado`);
     }
+  }
+
+  private static async callOpenAICompat(apiKey: string, prompt: string, url: string, model: string, label: string): Promise<string> {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 4000,
+        temperature: 0.7,
+      }),
+    });
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(`Erro ${label} (${response.status}): ${errorText || response.statusText}`);
+    }
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content ?? '';
   }
 
   private static async callGemini(apiKey: string, prompt: string, model?: string): Promise<string> {

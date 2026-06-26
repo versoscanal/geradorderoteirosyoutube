@@ -82,6 +82,61 @@ export const AI_PROVIDERS: AIProvider[] = [
       'claude-3-5-haiku-20241022',
       'claude-3-opus-20240229'
     ]
+  },
+  {
+    id: 'grok',
+    name: 'xAI Grok',
+    icon: '🚀',
+    endpoint: 'https://api.x.ai/v1/chat/completions',
+    keyName: 'grok_api_key',
+    getApiKeyUrl: 'https://console.x.ai/',
+    costPer1MTokens: 'Pay-per-use',
+    costInfo: 'Grok 2 e Grok Beta',
+    models: ['grok-2-latest', 'grok-2-1212', 'grok-beta']
+  },
+  {
+    id: 'mistral',
+    name: 'Mistral AI',
+    icon: '🌬️',
+    endpoint: 'https://api.mistral.ai/v1/chat/completions',
+    keyName: 'mistral_api_key',
+    getApiKeyUrl: 'https://console.mistral.ai/api-keys/',
+    costPer1MTokens: 'Pay-per-use',
+    costInfo: 'Mistral Large, Medium, Small',
+    models: ['mistral-large-latest', 'mistral-small-latest', 'open-mistral-nemo']
+  },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek',
+    icon: '🔍',
+    endpoint: 'https://api.deepseek.com/v1/chat/completions',
+    keyName: 'deepseek_api_key',
+    getApiKeyUrl: 'https://platform.deepseek.com/api_keys',
+    costPer1MTokens: 'Muito barato',
+    costInfo: 'DeepSeek Chat e Coder - excelente custo-benefício',
+    models: ['deepseek-chat', 'deepseek-reasoner']
+  },
+  {
+    id: 'perplexity',
+    name: 'Perplexity',
+    icon: '🔮',
+    endpoint: 'https://api.perplexity.ai/chat/completions',
+    keyName: 'perplexity_api_key',
+    getApiKeyUrl: 'https://www.perplexity.ai/settings/api',
+    costPer1MTokens: 'Pay-per-use',
+    costInfo: 'Modelos com busca online integrada',
+    models: ['llama-3.1-sonar-large-128k-online', 'llama-3.1-sonar-small-128k-online']
+  },
+  {
+    id: 'llama',
+    name: 'Meta Llama (Groq)',
+    icon: '🦙',
+    endpoint: 'https://api.groq.com/openai/v1/chat/completions',
+    keyName: 'groq_api_key',
+    getApiKeyUrl: 'https://console.groq.com/keys',
+    costPer1MTokens: 'Free tier disponível',
+    costInfo: 'Llama 3.3/3.1 via Groq - ultra rápido',
+    models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'llama-3.1-70b-versatile']
   }
 ];
 
